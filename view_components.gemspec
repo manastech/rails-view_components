@@ -20,11 +20,11 @@ Gem::Specification.new do |s|
   s.authors     = ["Brian J. Cardiff", "Santiago Palladino"]
   s.email       = ["bcardiff@manas.com.ar", "spalladino@manas.com.ar"]
   s.homepage    = "https://github.com/manastech/rails-view_components"
-  s.summary     = "TODO: Summary of ViewComponents."
-  s.description = "TODO: Description of ViewComponents."
+  s.summary     = "Simple library for building view components in Ruby on Rails"
+  s.description = "Simple library for building view components in Ruby on Rails. A view component is defined by sections and attributes, and its structure is defined once in a partial view in the `app/views/components` folder, and can be invoked by a simple helper method."
   s.license     = "MIT"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["{test,spec}/**/*"] - Dir["{test,spec}/dummy/tmp/**/*"] - Dir["{test,spec}/dummy/log/**/*"] - Dir["{test,spec}/dummy/db/*.sqlite3"]
 
   s.add_dependency "rails", rails
