@@ -36,9 +36,10 @@ Use it in your views:
 
 ## Installation
 
-Add `rails-view_components` to your Gemfile, using the path to the Github repository:
+Add `view_components` to your Gemfile:
 ```ruby
-gem 'rails-view_components', git: 'https://github.com/manastech/rails-view_components.git', branch: 'master'
+source 'https://rubygems.org'
+gem 'view_components'
 ```
 
 ## Usage
