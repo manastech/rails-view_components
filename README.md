@@ -8,7 +8,7 @@ Simple library for building view components in Ruby on Rails.
 
 Declare a component by name, and define its sections and attributes:
 ```ruby
-# app/helpers/components_helper.rb
+# app/helpers/application_helper.rb
 define_component :card, sections: [:body, :footer], attributes: [:title]
 ```
 
@@ -44,9 +44,10 @@ gem 'view_components'
 
 ## Usage
 
-Each component is defined by its structure, sections and attributes. To register a component, first invoke `define_component` in a view helper, such as `components_helper`:
+Each component is defined by its structure, sections and attributes. To register a component, first invoke `define_component` in your `application_helper`:
+
 ```ruby
-# app/helpers/components_helper.rb
+# app/helpers/application_helper.rb
 define_component :card, sections: [:body, :footer], attributes: [:title]
 ```
 
@@ -55,6 +56,17 @@ The name of the component must be a valid identifier, as well as the sections an
 The partial view will receive a hash as a local variable with the same name as the view (again, `card`), which will contain both the values of the attributes and sections.
 
 `define_component` will also define a method for your views with the specified name, that can be used as a builder for the component. The content of each block will be captured and inserted in the specified location in the partial view.
+
+If components are to be defined in another helper, extend `::ViewComponents::ComponentsBuilder`.
+
+```ruby
+# app/helpers/another_helper.rb
+module AnotherHelper
+  extend ::ViewComponents::ComponentsBuilder
+
+  define_component :card, sections: [:body, :footer], attributes: [:title]
+end
+```
 
 ## Roadmap
 
