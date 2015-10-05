@@ -1,4 +1,8 @@
-Rails.application.configure do
+if Rails::VERSION::MAJOR == 3
+  Dummy::Application
+else
+  Rails.application
+end.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's

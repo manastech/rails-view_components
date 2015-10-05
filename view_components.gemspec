@@ -13,6 +13,8 @@ else
   "~> #{rails_version}"
 end
 
+include_test_unit = travis == "true" && ENV["TRAVIS_RUBY_VERSION"] != "1.9.3"
+
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "view_components"
@@ -29,6 +31,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", rails
 
+  s.add_development_dependency "test-unit" if include_test_unit
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "haml-rails"
 end
