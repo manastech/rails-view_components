@@ -1,0 +1,6 @@
+%h1 Welcome#list
+
+= list title: "Digits" do |l|
+  - (0...10).each do |x|
+    - l.li do
+      %span= x

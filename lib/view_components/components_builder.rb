@@ -5,10 +5,10 @@ module ViewComponents
       attr_reader    :context, :attributes
       cattr_accessor :classes
 
-      def initialize(context, attributes)
+      def initialize(context, attributes = {})
         @context = context
         @attributes = attributes
-        @data = Hash.new
+        @data = Hash[self.class.sections.map{|s| [s[:name], []]}]
       end
 
       def to_h
@@ -21,11 +21,34 @@ module ViewComponents
 
       def self.create!(name, sections, attributes, partial)
         (self.classes ||= {})[name] = Class.new(self) do
-          sections.each do |section|
-            section_name = section[:name]
-            define_method section_name do |*args, &block|
-              instance_variable_get("@data")[section_name] = context.capture(&block)
+
+          instance_variable_set("@sections", [])
+          define_singleton_method :sections do
+            instance_variable_get("@sections")
+          end
+
+          sections.each do |section_def|
+            section = section_def.kind_of?(Hash) ? section_def : { name: section_def }
+            instance_variable_get("@sections") << section
+
+            method_name = if section[:multiple].kind_of?(String) || section[:multiple].kind_of?(Symbol)
+              section[:multiple]
+            elsif section[:multiple]
+              section[:name].to_s.singularize.to_sym
+            else
+              section[:name]
             end
+
+            define_method method_name do |*args, &block|
+              content = context.capture(&block)
+              data = instance_variable_get("@data")
+              if section[:multiple]
+                data[section[:name]] << content
+              else
+                data[section[:name]] = content
+              end
+            end
+
           end
 
           define_method :partial do
