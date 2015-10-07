@@ -51,7 +51,7 @@ module ViewComponents
             define_method method_name do |*args, &block|
               content = if subcomponent
                 c = Component.classes[subcomponent].new(self.send(:context), args.first)
-                block.call(c)
+                block.call(c) if block
                 c.render
               else
                 context.capture(&block)
@@ -114,7 +114,7 @@ module ViewComponents
       class_eval %(
         def #{name}(attributes = {}, &block)
           component = Component.classes[:#{name}].new(self, attributes)
-          block.call(component)
+          block.call(component) if block_given?
           component.render
         end
       )
