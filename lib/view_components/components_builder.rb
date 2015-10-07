@@ -16,7 +16,7 @@ module ViewComponents
       end
 
       def render
-        context.render partial: partial, locals: { name => to_h }
+        context.render partial: self.class.partial, locals: { self.class.component_name => to_h }
       end
 
       def self.create!(name, sections, attributes, partial)
@@ -27,8 +27,15 @@ module ViewComponents
             instance_variable_get("@sections")
           end
 
-          sections.each do |section_def|
-            section = section_def.kind_of?(Hash) ? section_def : { name: section_def }
+          define_singleton_method :partial do
+            partial
+          end
+
+          define_singleton_method :component_name do
+            name
+          end
+
+          sections.each do |section|
             instance_variable_get("@sections") << section
 
             method_name = if section[:multiple].kind_of?(String) || section[:multiple].kind_of?(Symbol)
@@ -39,8 +46,17 @@ module ViewComponents
               section[:name]
             end
 
+            subcomponent = section[:component]
+
             define_method method_name do |*args, &block|
-              content = context.capture(&block)
+              content = if subcomponent
+                c = Component.classes[subcomponent].new(self.send(:context), args.first)
+                block.call(c)
+                c.render
+              else
+                context.capture(&block)
+              end
+
               data = instance_variable_get("@data")
               if section[:multiple]
                 data[section[:name]] << content
@@ -49,14 +65,6 @@ module ViewComponents
               end
             end
 
-          end
-
-          define_method :partial do
-            partial
-          end
-
-          define_method :name do
-            name
           end
         end
       end

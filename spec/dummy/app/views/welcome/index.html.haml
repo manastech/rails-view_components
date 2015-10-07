@@ -11,3 +11,11 @@
 = card_alt initial: 'C' do |c|
   - c.body do
     Lorem ipsum dolor sit amet
+
+= paired_card do |p|
+  - p.left initial: 'L' do |c|
+    - c.body do
+      I'm in the lhs
+  - p.right initial: 'R' do |c|
+    - c.body do
+      I'm in the rhs
