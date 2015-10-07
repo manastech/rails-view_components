@@ -51,7 +51,19 @@ Each component is defined by its structure, sections and attributes. To register
 define_component :card, sections: [:body, :footer], attributes: [:title]
 ```
 
-The name of the component must be a valid identifier, as well as the sections and the attributes. This gem will then look for a partial view with defined name in the `components` views folder; `app/views/components/_card.html.haml` in the example.
+Alternatively, a component can be defined using the Component DSL:
+
+```ruby
+# app/helpers/application_helper.rb
+define_component :card do |c|
+  c.render "components/card"
+  c.attribute :title
+  c.section :body
+  c.section :footer
+end
+```
+
+The name of the component must be a valid identifier, as well as the sections and the attributes. This gem will then look for a partial view with defined name in the `components` views folder; `app/views/components/_card.html.haml` in the example, which can be overridden via the `render` attribute.
 
 The partial view will receive a hash as a local variable with the same name as the view (again, `card`), which will contain both the values of the attributes and sections.
 
@@ -63,7 +75,6 @@ If components are to be defined in another helper, extend `::ViewComponents::Com
 # app/helpers/another_helper.rb
 module AnotherHelper
   extend ::ViewComponents::ComponentsBuilder
-
   define_component :card, sections: [:body, :footer], attributes: [:title]
 end
 ```
@@ -92,6 +103,53 @@ And usage of the component is the same as previously, except that invoking `item
   - (0...10).each do |x|
     - l.li do
       %span= x
+```
+
+### Nesting components
+
+A component section may be yet another component. For example, a paired-card composed by two cards can be defined like this:
+
+```ruby
+define_component :paired_card do |c|
+  c.section :left,  component: :card
+  c.section :right, component: :card
+end
+```
+
+The definition of the component is handled as usual, including the section content in the markup:
+
+```haml
+%table
+  %tr
+    %td= paired_card[:left]
+    %td ---
+    %td= paired_card[:right]
+```
+
+But when invoking the component, each section method yields a component builder for the specified component class, so you can directly do this:
+
+```haml
+= paired_card do |p|
+  - p.left initial: 'L' do |c|
+    - c.body do
+      I'm in the lhs
+  - p.right initial: 'R' do |c|
+    - c.body do
+      I'm in the rhs
+```
+
+Instead of having to manually setup a new component in each section:
+
+```haml
+= paired_card do |p|
+  - p.left do
+    - card initial: 'L' do |c|
+      - c.body do
+        I'm in the left side
+  - p.right do
+    - card initial: 'R' do |c|
+      - c.body do
+        I'm in the right side
 ```
 
 ## Contributing
