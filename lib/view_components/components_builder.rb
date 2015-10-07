@@ -8,7 +8,7 @@ module ViewComponents
       def initialize(context, attributes = {})
         @context = context
         @attributes = attributes
-        @data = Hash[self.class.sections.map{|s| [s[:name], []]}]
+        @data = Hash[self.class.sections.select{|s| s[:multiple] != false}.map{|s| [s[:name], []]}]
       end
 
       def to_h
