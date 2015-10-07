@@ -68,9 +68,31 @@ module AnotherHelper
 end
 ```
 
-## Roadmap
+### Repeatable sections
 
-Next in the roadmap is adding support for collections, which should act as sections that are inserted multiple times in the component.
+A section can be marked as `multiple` if it is to be invoked multiple times in the component. A simple example is a list, where the `item` section is repeated multiple times:
+
+```ruby
+define_component :list, sections: [{name: :items, multiple: :item}], attributes: [:title]
+```
+
+The partial view with the component layout definition will receive in `items` an array with all instances of the section already rendered:
+
+```haml
+%span= list[:title]
+%ul
+  - list[:items].each do |item|
+    %li= item
+```
+
+And usage of the component is the same as previously, except that invoking `item` (which is the value of the `multiple` key, or the singularisation of the `name` key) multiple times will add several items, rather than overriding it:
+
+```haml
+= list title: "Digits" do |l|
+  - (0...10).each do |x|
+    - l.li do
+      %span= x
+```
 
 ## Contributing
 
