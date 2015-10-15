@@ -43,12 +43,12 @@ RSpec.describe ApplicationHelper, :type => :helper do
       rendered = helper.paired_card do |p|
         p.left initial: 'L' do |c|
           c.body do
-            "I'm in the lhs"
+            "In the lhs"
           end
         end
         p.right initial: 'R' do |c|
           c.body do
-            "I'm in the rhs"
+            "In the rhs"
           end
         end
       end
@@ -56,11 +56,11 @@ RSpec.describe ApplicationHelper, :type => :helper do
       expect(rendered).to eq %(<table>
 <tr>
 <td><h1>L</h1>
-<p>I&#39;m in the lhs</p>
+<p>In the lhs</p>
 </td>
 <td>---</td>
 <td><h1>R</h1>
-<p>I&#39;m in the rhs</p>
+<p>In the rhs</p>
 </td>
 </tr>
 </table>

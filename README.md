@@ -132,10 +132,10 @@ But when invoking the component, each section method yields a component builder 
 = paired_card do |p|
   - p.left initial: 'L' do |c|
     - c.body do
-      I'm in the lhs
+      In the lhs
   - p.right initial: 'R' do |c|
     - c.body do
-      I'm in the rhs
+      In the rhs
 ```
 
 Instead of having to manually setup a new component in each section:
