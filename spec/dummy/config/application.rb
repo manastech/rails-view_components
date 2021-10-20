@@ -10,6 +10,7 @@ require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
 require "view_components"
+require 'haml-rails'
 
 module Dummy
   class Application < Rails::Application

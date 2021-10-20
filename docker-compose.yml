@@ -1,0 +1,16 @@
+version: '2.0'
+
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    working_dir: /src
+    volumes:
+      - .:/src
+      - bundle:/usr/local/bundle
+    # command: /bin/true
+    tty: true
+
+volumes:
+  bundle:

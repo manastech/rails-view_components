@@ -1,4 +1,5 @@
 module ApplicationHelper
+  extend ::ViewComponents::ComponentsBuilder
 
   define_component :card, sections: [:body], attributes: [:initial]
 
